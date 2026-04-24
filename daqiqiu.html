@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 给帆帆的小游戏 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 4em;
+            color: #fff;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            animation: rainbow 3s ease-in-out infinite;
+        }
+
+        @keyframes rainbow {
+
+            0%,
+            100% {
+                color: #ff6b6b;
+            }
+
+            25% {
+                color: #4ecdc4;
+            }
+
+            50% {
+                color: #45b7d1;
+            }
+
+            75% {
+                color: #96ceb4;
+            }
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 50px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-section {
+            max-width: 800px;
+            margin: 0 auto 50px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .game-title {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        /* 打气球游戏 */
+        .balloon-game {
+            position: relative;
+            height: 400px;
+            border: 2px dashed #667eea;
+            border-radius: 15px;
+            margin: 30px 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #e3f2fd 0%, #ffffff 100%);
+        }
+
+        .balloon {
+            position: absolute;
+            width: 80px;
+            height: 100px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 20px;
+            background: #333;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        .balloon:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .game-controls {
+            margin: 30px 0;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            margin: 0 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* 礼物盒 */
+        .gift-section {
+            margin: 50px 0;
+        }
+
+        .gift-box {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        .gift-box:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .gift-box::before {
+            content: '🎁';
+            font-size: 150px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .gift-text {
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .gift-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            animation: popIn 0.5s ease forwards;
+        }
+
+        .gift-content.show {
+            display: block;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .gift-content h3 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .gift-content p {
+            color: #555;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        /* 互动问答 */
+        .quiz-section {
+            margin: 50px 0;
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .quiz-question {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .quiz-option {
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #f44336;
+            background: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+        }
+
+        .quiz-feedback {
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .quiz-feedback.correct {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+            display: block;
+        }
+
+        .quiz-feedback.incorrect {
+            background: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            display: block;
+        }
+
+        /* 星空背景 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* 粒子效果 */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            animation: floatUp 6s ease-in-out infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) scale(1);
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* 倒计时 */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px 35px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            min-width: 100px;
+        }
+
+        .countdown-item span {
+            display: block;
+            font-size: 2.5em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .countdown-item label {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        /* 音乐控制 */
+        .music-controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+        }
+
+        .music-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: #fff;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .music-btn.playing {
+            animation: musicPulse 0.5s ease-in-out infinite;
+        }
+
+        @keyframes musicPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .game-section {
+                padding: 20px;
+            }
+
+            .countdown {
+                gap: 15px;
+            }
+
+            .countdown-item {
+                padding: 15px 20px;
+                min-width: 80px;
+            }
+
+            .countdown-item span {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <h1>🎮 帆帆专属小游戏 💕</h1>
+        <p class="subtitle">你快试试你能达到多少分</p>
+
+        <!-- 倒计时 -->
+        <div class="countdown">
+            <div class="countdown-item">
+                <span id="days">2042</span>
+                <label>天</label>
+            </div>
+            <div class="countdown-item">
+                <span id="hours">00</span>
+                <label>时</label>
+            </div>
+            <div class="countdown-item">
+                <span id="minutes">00</span>
+                <label>分</label>
+            </div>
+            <div class="countdown-item">
+                <span id="seconds">00</span>
+                <label>秒</label>
+            </div>
+        </div>
+
+        <!-- 打气球游戏 -->
+        <div class="game-section">
+            <h2 class="game-title">🎈 打气球游戏</h2>
+            <div class="game-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="score">0</div>
+                    <div class="stat-label">得分</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="time">30</div>
+                    <div class="stat-label">时间</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="level">1</div>
+                    <div class="stat-label">关卡</div>
+                </div>
+            </div>
+            <div class="balloon-game" id="balloonGame"></div>
+            <div class="game-controls">
+                <button class="btn" onclick="startGame()">开始游戏 🚀</button>
+                <button class="btn" onclick="resetGame()">重置游戏 🔄</button>
+            </div>
+        </div>
+
+        <!-- 礼物盒 -->
+        <div class="gift-section">
+            <div class="gift-box" onclick="openGift()">
+                <span class="gift-text">点击打开礼物 🎁</span>
+            </div>
+            <div class="gift-content" id="giftContent">
+                <h3>💕 给你的惊喜 💕</h3>
+                <p>亲爱的帆帆，这是我为你准备的小礼物～</p>
+                <p>300元兑换卡（可兑换现金也可以换你喜欢的商品）</p>
+                <p>希望你每天都开心，</p>
+                <p>就像看到这个礼物一样！</p>
+                <p>不管未来怎样，</p>
+                <p>我都会一直陪在你身边～</p>
+                <p>特别备注（兑换卡长期有效，就像我对你的爱一样）</p>
+                <p>最终解释权归帆帆所有（帆帆说的算，其他都无效）</p>
+                <p style="text-align: right; color: #667eea; font-style: italic; margin-top: 30px;">—— 最爱你的人 💋</p>
+            </div>
+        </div>
+
+        <!-- 互动问答 -->
+        <div class="quiz-section">
+            <div class="quiz-container">
+                <h2 class="game-title">💖 你了解我吗？</h2>
+                <div class="quiz-question" id="quizQuestion">点击开始答题～</div>
+                <div class="quiz-options" id="quizOptions"></div>
+                <div class="quiz-feedback" id="quizFeedback"></div>
+                <div class="game-controls">
+                    <button class="btn" onclick="startQuiz()">开始答题 📝</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="music-controls">
+        <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let timeLeft = 30;
+        let level = 1;
+        let gameInterval;
+        let isGameRunning = false;
+        let isPlaying = false;
+        let quizIndex = 0;
+        let correctAnswers = 0;
+
+        // 打气球游戏
+        const balloonColors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffcc5c', '#ff9ff3', '#54a0ff'];
+
+        function startGame() {
+            if (isGameRunning) return;
+
+            isGameRunning = true;
+            score = 0;
+            timeLeft = 60; // 增加游戏时间到60秒
+            level = 1;
+            updateGameStats();
+
+            // 清空游戏区域
+            document.getElementById('balloonGame').innerHTML = '';
+
+            // 生成初始气球
+            generateBalloons();
+
+            // 开始持续生成气球
+            startBalloonGeneration();
+
+            // 开始计时
+            gameInterval = setInterval(() => {
+                timeLeft--;
+                updateGameStats();
+
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+
+                // 每5秒增加难度
+                if (timeLeft % 5 === 0 && timeLeft > 0) {
+                    level++;
+                }
+            }, 1000);
+        }
+
+        function generateBalloons() {
+            const gameArea = document.getElementById('balloonGame');
+
+            // 清空现有气球
+            gameArea.innerHTML = '';
+
+            const balloonCount = 10 + level * 3; // 增加气球数量
+
+            for (let i = 0; i < balloonCount; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.style.left = Math.random() * 85 + '%';
+                balloon.style.top = Math.random() * 80 + '%';
+                balloon.style.backgroundColor = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+                balloon.style.animationDelay = Math.random() * 3 + 's';
+                balloon.style.animationDuration = (2 + Math.random() * 2) + 's'; // 加快漂浮速度
+
+                balloon.onclick = function () {
+                    if (isGameRunning) {
+                        score += level;
+                        updateGameStats();
+                        balloon.style.animation = 'pop 0.3s ease forwards';
+                        setTimeout(() => balloon.remove(), 300);
+                        createConfetti(balloon.getBoundingClientRect());
+                    }
+                };
+
+                gameArea.appendChild(balloon);
+            }
+        }
+
+        // 持续生成气球
+        let balloonInterval;
+
+        function startBalloonGeneration() {
+            // 每2秒生成一批新气球
+            balloonInterval = setInterval(() => {
+                if (isGameRunning) {
+                    generateBalloons();
+                }
+            }, 2000);
+        }
+
+        function stopBalloonGeneration() {
+            clearInterval(balloonInterval);
+        }
+
+        function updateGameStats() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('time').textContent = timeLeft;
+            document.getElementById('level').textContent = level;
+        }
+
+        function endGame() {
+            clearInterval(gameInterval);
+            stopBalloonGeneration(); // 停止生成气球
+            isGameRunning = false;
+            alert(`游戏结束！你的得分：${score} 分,满1314找对象要礼物`);
+        }
+
+        function resetGame() {
+            clearInterval(gameInterval);
+            stopBalloonGeneration(); // 停止生成气球
+            isGameRunning = false;
+            score = 0;
+            timeLeft = 60;
+            level = 1;
+            updateGameStats();
+            document.getElementById('balloonGame').innerHTML = '';
+        }
+
+        // 打开礼物
+        function openGift() {
+            const giftContent = document.getElementById('giftContent');
+            giftContent.classList.add('show');
+            createConfetti({ left: window.innerWidth / 2, top: window.innerHeight / 2 });
+            createFireworks(window.innerWidth / 2, window.innerHeight / 2);
+        }
+
+        // 互动问答
+        const quizQuestions = [
+            {
+                question: '我最喜欢的颜色是？',
+                options: ['红色', '蓝色', '粉色', '黑色'],
+                correct: 3
+            },
+            {
+                question: '我最想和你一起做的事是？',
+                options: ['看电影', '旅行', '逛街', '宅家'],
+                correct: 3
+            },
+            {
+                question: '我生气的时候最喜欢？',
+                options: ['吃零食', '逛街', '听音乐', '沉默'],
+                correct: 3
+            },
+            {
+                question: '我最害怕的东西是？',
+                options: ['虫子', '黑', '高', '孤独'],
+                correct: 3
+            },
+            {
+                question: '我最喜欢的季节是？',
+                options: ['春天', '夏天', '秋天', '冬天'],
+                correct: 2
+            }
+        ];
+
+        function startQuiz() {
+            quizIndex = 0;
+            correctAnswers = 0;
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            if (quizIndex >= quizQuestions.length) {
+                alert(`答题完成！你答对了 ${correctAnswers} 题，太棒了！`);
+                return;
+            }
+
+            const question = quizQuestions[quizIndex];
+            document.getElementById('quizQuestion').textContent = question.question;
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'quiz-option';
+                optionElement.textContent = option;
+                optionElement.onclick = function () {
+                    checkAnswer(index);
+                };
+                optionsContainer.appendChild(optionElement);
+            });
+
+            document.getElementById('quizFeedback').style.display = 'none';
+        }
+
+        function checkAnswer(selectedIndex) {
+            const question = quizQuestions[quizIndex];
+            const options = document.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('quizFeedback');
+
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex) {
+                    option.classList.add('incorrect');
+                }
+            });
+
+            if (selectedIndex === question.correct) {
+                feedback.className = 'quiz-feedback correct';
+                feedback.textContent = '🎉 答对了！你真了解我～';
+                correctAnswers++;
+                createConfetti({ left: window.innerWidth / 2, top: window.innerHeight / 2 });
+            } else {
+                feedback.className = 'quiz-feedback incorrect';
+                feedback.textContent = `😢 答错了，正确答案是：${question.options[question.correct]}`;
+            }
+
+            feedback.style.display = 'block';
+
+            setTimeout(() => {
+                quizIndex++;
+                showQuizQuestion();
+            }, 2000);
+        }
+
+        // 创建星星背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = (Math.random() * 3 + 1) + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 创建粒子效果
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particle.style.animationDuration = (4 + Math.random() * 2) + 's';
+                particlesContainer.appendChild(particle);
+
+                setTimeout(() => particle.remove(), 6000);
+            }, 500);
+        }
+
+        // 创建彩纸效果
+        function createConfetti(rect) {
+            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
+
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '15px';
+                confetti.style.height = '15px';
+                confetti.style.left = rect.left + rect.width / 2 + 'px';
+                confetti.style.top = rect.top + rect.height / 2 + 'px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.zIndex = '1000';
+                confetti.style.animation = 'confettiFall 4s linear forwards';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 4000);
+            }
+        }
+
+        // 创建烟花效果
+        function createFireworks(x, y) {
+            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#ff9f43'];
+
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.width = '6px';
+                particle.style.height = '6px';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '1000';
+
+                const angle = (i / 30) * Math.PI * 2;
+                const velocity = 80 + Math.random() * 40;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+
+                particle.style.transform = `translate(${tx}px, ${ty}px)`;
+                particle.style.animation = `fireworkExplode 1s ease-out forwards`;
+                document.body.appendChild(particle);
+
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
+
+        // 更新倒计时
+        function updateCountdown() {
+            const now = new Date();
+
+            // 计算从2020年9月21日到当前日期的天数
+            const startDate = new Date('2020-09-21');
+            const diffTime = Math.abs(now - startDate);
+            const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            // 获取当前时间的时分秒
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            document.getElementById('days').textContent = String(days).padStart(4, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        // 音乐控制
+        function toggleMusic() {
+            const btn = document.getElementById('musicBtn');
+            isPlaying = !isPlaying;
+
+            if (isPlaying) {
+                btn.classList.add('playing');
+                btn.textContent = '🎶';
+            } else {
+                btn.classList.remove('playing');
+                btn.textContent = '🎵';
+            }
+        }
+
+        // 自动烟花效果
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                const randomX = Math.random() * window.innerWidth;
+                const randomY = Math.random() * window.innerHeight * 0.5;
+                createFireworks(randomX, randomY);
+            }
+        }, 8000);
+
+        // 初始化
+        createStars();
+        createParticles();
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // 全局点击效果
+        document.addEventListener('click', function (e) {
+            const heart = document.createElement('div');
+            heart.style.position = 'absolute';
+            heart.style.fontSize = '30px';
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            heart.style.pointerEvents = 'none';
+            heart.style.zIndex = '1000';
+            heart.textContent = ['💕', '💖', '❤️', '💗'][Math.floor(Math.random() * 4)];
+            heart.style.animation = 'clickHeart 1s ease-out forwards';
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 1000);
+        });
+
+        // 动画定义
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pop {
+                0% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.5); opacity: 0.5; }
+                100% { transform: scale(0); opacity: 0; }
+            }
+            @keyframes clickHeart {
+                0% { transform: scale(0); opacity: 1; }
+                50% { transform: scale(1.5); opacity: 0.8; }
+                100% { transform: scale(2) translateY(-100px); opacity: 0; }
+            }
+            @keyframes confettiFall {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+            @keyframes fireworkExplode {
+                0% {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(20);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>
